@@ -34,6 +34,15 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model VerificationToken {
+  id         String   @id @map("_id")
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model User {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -46,7 +55,7 @@ model User {
   comments      Comments[]
 }
 
-model Verksted {
+model Workshop {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   dateCreated DateTime @default(now())
@@ -63,8 +72,8 @@ model Items {
   dateCreated     DateTime   @default(now())
   dateUpdated     DateTime   @updatedAt
   comments        Comments[]
-  verksted        Verksted?  @relation(fields: [verkstedId], references: [id], onDelete: Cascade)
-  verkstedId      String?    @db.ObjectId
+  workshop        Workshop?  @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  workshopId      String?    @db.ObjectId
   image           Image?     @relation(fields: [imageId], references: [id])
   imageId         String?    @db.ObjectId
 }
