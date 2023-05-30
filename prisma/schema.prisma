@@ -6,3 +6,94 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String
+  role          Role       @default(USER)
+  accounts      Account[]
+  sessions      Session[]
+  comments      Comments[]
+}
+
+model Verksted {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  dateCreated DateTime @default(now())
+  dateUpdated DateTime @updatedAt
+  items       Items[]
+}
+
+model Items {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  category        Category
+  itemType        String
+  dateOfPurchase  DateTime
+  storageLocation String
+  dateCreated     DateTime   @default(now())
+  dateUpdated     DateTime   @updatedAt
+  comments        Comments[]
+  verksted        Verksted?  @relation(fields: [verkstedId], references: [id], onDelete: Cascade)
+  verkstedId      String?    @db.ObjectId
+  image           Image?     @relation(fields: [imageId], references: [id])
+  imageId         String?    @db.ObjectId
+}
+
+model Image {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  internalName String
+  path         String
+  Items        Items[]
+}
+
+model Comments {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  content     String
+  dateCreated DateTime @default(now())
+  dateUpdated DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  items       Items?   @relation(fields: [itemsId], references: [id], onDelete: Cascade)
+  itemsId     String?  @db.ObjectId
+}
+
+enum Category {
+  TOOL
+  EQUIPMENT
+}
+
+enum Role {
+  USER
+  ADMIN
+}
