@@ -1,23 +1,32 @@
 import NextAuth from 'next-auth/next';
 import GithubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
+import GoogleProvider from 'next-auth/providers/google';
 import { prisma } from '@/lib/db';
 
+// Throw error if ID or SECRET is missing
 if (!process.env.GITHUB_ID) throw new Error('GITHUB_ID Missing');
-if (!process.env.GITHUB_SECRET) throw new Error('GITHUB_ID Missing');
+if (!process.env.GITHUB_SECRET) throw new Error('GITHUB_SECRET Missing');
+if (!process.env.GOOGLE_CLIENT_ID) throw new Error('GOOGLE_CLIENT_ID Missing');
+if (!process.env.GOOGLE_CLIENT_SECRET)
+  throw new Error('GOOGLE_CLIENT_SECRET Missing');
 
 export default NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
 
-  // Adding admin & userId to session
+  // Adding role & userId to session
   callbacks: {
-    // Updating session on client with columns from database. Right now its only "WhiteListed" (true or false)
+    // Updating session on client with columns from database
     async session({ session }) {
       // Finds user by email
       const userData = await prisma.user.findFirst({
@@ -25,12 +34,12 @@ export default NextAuth({
           email: session.user?.email,
         },
       });
-      // Updates session by adding whiteListed - boolean
+      // Updates session by role and userId
       const updatedSession = {
         ...session,
         user: {
           ...session.user,
-          admin: userData?.admin,
+          role: userData?.role,
           userId: userData?.id,
         },
       };
