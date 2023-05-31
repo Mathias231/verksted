@@ -53,6 +53,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   comments      Comments[]
+  items         Items[]
 }
 
 model Workshop {
@@ -65,6 +66,9 @@ model Workshop {
 
 model Items {
   id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String?    @db.ObjectId
+  workshopId      String?    @db.ObjectId
+  imageId         String?    @db.ObjectId
   category        Category
   itemType        String
   dateOfPurchase  DateTime
@@ -73,9 +77,8 @@ model Items {
   dateUpdated     DateTime   @updatedAt
   comments        Comments[]
   workshop        Workshop?  @relation(fields: [workshopId], references: [id], onDelete: Cascade)
-  workshopId      String?    @db.ObjectId
   image           Image?     @relation(fields: [imageId], references: [id])
-  imageId         String?    @db.ObjectId
+  User            User?      @relation(fields: [userId], references: [id])
 }
 
 model Image {
@@ -89,12 +92,12 @@ model Image {
 model Comments {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String   @db.ObjectId
+  itemsId     String?  @db.ObjectId
   content     String
   dateCreated DateTime @default(now())
   dateUpdated DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
   items       Items?   @relation(fields: [itemsId], references: [id], onDelete: Cascade)
-  itemsId     String?  @db.ObjectId
 }
 
 enum Category {
