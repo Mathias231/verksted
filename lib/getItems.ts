@@ -1,7 +1,8 @@
-import { IItem, ItemResponse } from '@/types/workshop.types';
+import { IItem } from '@/types/workshop.types';
 import axios from 'axios';
 import useSWR, { mutate } from 'swr';
 import { useState, useEffect } from 'react';
+import { ItemResponse } from '@/types/swr.types';
 
 const fetcher = async <T>(url: string) => {
   let res = await axios.request<T>({
