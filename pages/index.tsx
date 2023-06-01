@@ -6,12 +6,25 @@ import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 
 export default function Home() {
-  const { items, error, isLoading, nextPage, prevPage, mutate } = GetItems();
+  const {
+    items,
+    count,
+    error,
+    isLoading,
+    pageLength,
+    pageOffset,
+    nextPage,
+    prevPage,
+    mutate,
+  } = GetItems();
   const { data: session } = useSession();
+
   if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Laster data...</div>;
-  if (!items) return <div>Laster data...</div>;
+  if (!items || !count) return <div>Laster data...</div>;
 
+  const currentPage = Math.floor(pageOffset / pageLength) + 1;
+  const totalPageCount = Math.ceil(count / pageLength);
   return (
     <div>
       {session?.user.role === 'ADMIN' && (
@@ -21,26 +34,26 @@ export default function Home() {
           </Link>
         </div>
       )}
-
-      {/* {items.map((item) => {
+      {items.map((item) => {
         return <Item key={item.id} {...item} />;
       })}
-
-      <button
-        className="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-4"
-        onClick={prevPage}
-      >
-        Tilbake
-      </button>
-
-      <div>----------</div>
-
-      <button
-        className="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-4 ml-4"
-        onClick={nextPage}
-      >
-        Neste
-      </button> */}
+      {pageOffset - pageLength >= 0 && (
+        <button
+          className="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-4"
+          onClick={prevPage}
+        >
+          Tilbake
+        </button>
+      )}
+      {currentPage} / {totalPageCount}
+      {pageOffset + pageLength < count && (
+        <button
+          className="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-4 ml-4"
+          onClick={nextPage}
+        >
+          Neste
+        </button>
+      )}
     </div>
   );
 }
