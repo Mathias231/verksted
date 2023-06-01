@@ -1,4 +1,6 @@
 import { prisma } from '@/lib/db';
+import { IItem } from '@/types/workshop.types';
+import { Category } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 import { z } from 'zod';
@@ -44,7 +46,7 @@ router.get(async (req, res) => {
       workshopId: true,
       category: true,
       itemType: true,
-      // imageId: true,
+      imageId: true,
       dateOfPurchase: true,
       storageLocation: true,
       dateCreated: true,
@@ -53,8 +55,9 @@ router.get(async (req, res) => {
     take: parseInt(take),
     skip: parseInt(skip),
   });
+  const totalAmount = await prisma.items.count();
 
-  res.status(200).send(getCategory);
+  res.status(200).send({ item: getCategory, totalAmount });
 });
 
 router.put(async (req, res) => {
