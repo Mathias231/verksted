@@ -1,9 +1,8 @@
 import { IItem } from '@/types/workshop.types';
-import React from 'react';
+import React, { useState } from 'react';
 
 function Item(item: IItem) {
-  console.log(item);
-  return <div></div>;
+  return <div>{item.itemType}</div>;
 }
 
 export default Item;
