@@ -12,9 +12,8 @@ const fetcher = async <T>(url: string) => {
 };
 
 export default function GetWorkshopWithItems() {
-  const { data, error, isLoading, mutate } = useSWR(
-    `/api/workshop?limit=10`,
-    () => fetcher<IWorkshop>('/api/workshop'),
+  const { data, error, isLoading, mutate } = useSWR(`/api/workshop/`, () =>
+    fetcher<IWorkshop>('/api/workshop/'),
   );
 
   return { workshop: data, error, isLoading, mutate };
