@@ -70,6 +70,7 @@ model Items {
   workshopId      String?    @db.ObjectId
   imageId         String?    @db.ObjectId
   category        Category
+  name            String
   itemType        String
   dateOfPurchase  DateTime
   storageLocation String
