@@ -84,7 +84,7 @@ function CreateItem() {
     setName('');
     setImage(null);
     setDateOfPurchase(new Date());
-    setLocation('null');
+    setLocation('');
     setType('');
     setLoading(false);
 
@@ -144,7 +144,7 @@ function CreateItem() {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="col-span-6">
               <label className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
+                Last opp bilde
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div className="text-center">
@@ -192,7 +192,7 @@ function CreateItem() {
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="col-span-6">
               <label className="block text-sm font-medium leading-6 text-gray-900">
-                Dato
+                Kjøpsdato
               </label>
               <div className="mt-2">
                 <DatePicker
