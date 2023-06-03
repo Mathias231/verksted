@@ -3,12 +3,12 @@ import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
+const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 
 // Finds user and puts it inside req object
 router.use(getUser);
 
-router.post(async (req: NextApiRequestWithUser, res) => {
+router.post(async (req, res) => {
   const { userId, itemId, content } = req.body;
 
   if (!req.user) return res.status(401).send('Not logged in');
