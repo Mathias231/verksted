@@ -45,9 +45,11 @@ export default function Home() {
           </Link>
         </div>
       )}
-      {items.map((item) => {
-        return <Item key={item.id} {...item} />;
-      })}
+      <div className="border m-5 p-5 rounded-md grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        {items.map((item) => {
+          return <Item key={item.id} {...item} />;
+        })}
+      </div>
       {pageOffset - pageLength >= 0 && (
         <button
           className="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mt-4"
