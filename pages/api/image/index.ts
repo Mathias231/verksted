@@ -34,13 +34,19 @@ router.post(async (req, res) => {
     return res.status(400).send('Invalid file type');
   }
 
-  const response = await prisma.image.create({
-    data: {
-      name: file.originalFilename || file.newFilename,
-      internalName: file.newFilename,
-      path: file.filepath,
-    },
-  });
+  const response = await prisma.image
+    .create({
+      data: {
+        name: file.originalFilename || file.newFilename,
+        internalName: file.newFilename,
+        path: file.filepath,
+      },
+    })
+    .catch((err) => {
+      return res.status(404).send(err);
+    });
+
+  if (!response) return res.status(404).send('Error: ' + response);
 
   res.status(200).send({
     imageId: response.id,
