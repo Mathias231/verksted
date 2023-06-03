@@ -21,7 +21,19 @@ export default function Home() {
 
   if (error) return <div>Error: {error}</div>;
   if (isLoading) return <div>Laster data...</div>;
-  if (!items || !count) return <div>Laster data...</div>;
+  if (!items || !count)
+    return (
+      <div>
+        {session?.user.role === 'ADMIN' && (
+          <div className="flex justify-center mt-3">
+            <Link href="/createItem/" title="Legg til verktøy">
+              <FaPlus size={40} className="hover:animate-spin" />
+            </Link>
+          </div>
+        )}
+        Laster data...
+      </div>
+    );
 
   const currentPage = Math.floor(pageOffset / pageLength) + 1;
   const totalPageCount = Math.ceil(count / pageLength);
