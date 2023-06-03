@@ -13,7 +13,9 @@ export interface IItem {
   itemType: string;
   dateOfPurchuase: Date;
   storageLocation: string;
-  imageId: string;
+  image: {
+    internalName: string;
+  };
   dateCreated: Date;
   dateUpdated: string;
 }
