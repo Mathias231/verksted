@@ -1,9 +1,7 @@
 import { prisma } from '@/lib/db';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getServerSession } from 'next-auth';
+import { NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 import z from 'zod';
-import { authOptions } from '../auth/[...nextauth]';
 import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
 
 const router = createRouter<NextApiRequestWithUser, NextApiResponse>();

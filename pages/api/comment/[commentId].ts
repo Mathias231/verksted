@@ -1,22 +1,22 @@
 import { prisma } from '@/lib/db';
 import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 import z from 'zod';
 
 const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 
-router.get(async (req, res) => {
-  const commentId = z.string().parse(req.query.commentId);
+// router.get(async (req, res) => {
+//   const commentId = z.string().parse(req.query.commentId);
 
-  const getComment = await prisma.comments.findFirst({
-    where: {
-      id: commentId,
-    },
-  });
+//   const getComment = await prisma.comments.findFirst({
+//     where: {
+//       id: commentId,
+//     },
+//   });
 
-  res.status(200).send(commentId);
-});
+//   res.status(200).send(commentId);
+// });
 
 router.use(getUser);
 // Finds user and puts it inside req object

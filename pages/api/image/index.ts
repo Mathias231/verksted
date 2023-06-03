@@ -2,7 +2,7 @@ import { prisma } from '@/lib/db';
 import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
 import { formidableParseAsync } from '@/utils/formidable-parse';
 import formidable from 'formidable';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 
 const router = createRouter<NextApiRequestWithUser, NextApiResponse>();

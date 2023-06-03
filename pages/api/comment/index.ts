@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 
 const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
@@ -9,7 +9,7 @@ const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 router.use(getUser);
 
 router.post(async (req, res) => {
-  const { userId, itemId, content } = req.body;
+  const { itemId, content } = req.body;
 
   if (!req.user) return res.status(401).send('Not logged in');
 

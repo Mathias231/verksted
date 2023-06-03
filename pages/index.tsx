@@ -1,6 +1,5 @@
 import Item from '@/components/paginationItem/item';
 import GetItems from '@/lib/getItems';
-import GetWorkshopWithItems from '@/lib/getWorkshopWithItems';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
