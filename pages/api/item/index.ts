@@ -1,39 +1,10 @@
 import { prisma } from '@/lib/db';
-import { IItem } from '@/types/workshop.types';
-import { Category } from '@prisma/client';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import { createRouter } from 'next-connect';
 import { z } from 'zod';
+import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
 
-const router = createRouter<NextApiRequest, NextApiResponse>();
-
-router.post(async (req, res) => {
-  const {
-    userId,
-    workshopId,
-    category,
-    itemType,
-    dateOfPurchase,
-    storageLocation,
-    imageId,
-  } = req.body;
-
-  const createItem = await prisma.items.create({
-    data: {
-      userId: userId,
-      workshopId: workshopId,
-      category: category,
-      itemType: itemType,
-      dateOfPurchase: dateOfPurchase,
-      storageLocation: storageLocation,
-      imageId: imageId,
-      dateCreated: new Date(),
-      dateUpdated: new Date(),
-    },
-  });
-
-  res.status(200).send('Item Created!');
-});
+const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 
 router.get(async (req, res) => {
   const take = z.string().parse(req.query.take);
@@ -42,9 +13,9 @@ router.get(async (req, res) => {
   const getCategory = await prisma.items.findMany({
     select: {
       id: true,
-      userId: true,
       workshopId: true,
       category: true,
+      name: true,
       itemType: true,
       imageId: true,
       dateOfPurchase: true,
@@ -60,22 +31,42 @@ router.get(async (req, res) => {
   res.status(200).send({ item: getCategory, totalAmount });
 });
 
-router.put(async (req, res) => {
-  const { itemId, itemType, dateOfPurchase, storageLocation } = req.body;
+// Finds user and puts it inside req object
+router.use(getUser);
 
-  const updateItem = await prisma.items.update({
-    where: {
-      id: itemId,
-    },
+router.post(async (req, res) => {
+  // If user is not logged in, return 401
+  if (!req.user) return res.status(401).send('Not logged in');
+
+  if (req.user.user.role !== 'ADMIN')
+    return res.status(401).send('Not Authorized');
+
+  const {
+    workshopId,
+    category,
+    name,
+    itemType,
+    dateOfPurchase,
+    storageLocation,
+    imageId,
+  } = req.body;
+
+  const createItem = await prisma.items.create({
     data: {
+      userId: req.user?.user.userId,
+      workshopId: workshopId,
+      category: category,
+      name: name,
       itemType: itemType,
       dateOfPurchase: dateOfPurchase,
       storageLocation: storageLocation,
+      imageId: imageId,
+      dateCreated: new Date(),
       dateUpdated: new Date(),
     },
   });
 
-  res.status(200).send('Item Updated');
+  res.status(200).send('Item Created!');
 });
 
 export default router.handler({
