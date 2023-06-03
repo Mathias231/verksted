@@ -10,14 +10,18 @@ router.get(async (req, res) => {
   const take = z.string().parse(req.query.take);
   const skip = z.string().parse(req.query.skip);
 
-  const getCategory = await prisma.items.findMany({
+  const getItem = await prisma.items.findMany({
     select: {
       id: true,
       workshopId: true,
       category: true,
       name: true,
       itemType: true,
-      imageId: true,
+      image: {
+        select: {
+          internalName: true,
+        },
+      },
       dateOfPurchase: true,
       storageLocation: true,
       dateCreated: true,
@@ -28,7 +32,7 @@ router.get(async (req, res) => {
   });
   const totalAmount = await prisma.items.count();
 
-  res.status(200).send({ item: getCategory, totalAmount });
+  res.status(200).send({ item: getItem, totalAmount });
 });
 
 // Finds user and puts it inside req object
