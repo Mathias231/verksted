@@ -102,8 +102,8 @@ model Comments {
 }
 
 enum Category {
-  TOOL
-  EQUIPMENT
+  VERKTOY
+  UTSTYR
 }
 
 enum Role {
