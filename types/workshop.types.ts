@@ -1,7 +1,7 @@
 export interface IWorkshop {
   id: string;
-  dateCreated: Date;
-  dateUpdated: Date;
+  dateCreated: string;
+  dateUpdated: string;
   items: IItem[];
 }
 
@@ -11,11 +11,36 @@ export interface IItem {
   category: string;
   name: string;
   itemType: string;
-  dateOfPurchuase: Date;
+  dateOfPurchuase: string;
   storageLocation: string;
   image: {
     internalName: string;
   };
-  dateCreated: Date;
+  dateCreated: string;
   dateUpdated: string;
+}
+
+export interface IItemWithComments {
+  name: string;
+  category: string;
+  storageLocation: string;
+  itemType: string;
+  dateOfPurchase: string;
+  image: {
+    internalName: string;
+  };
+  comments: IComment[];
+  dateCreated: string;
+  dateUpdated: string;
+}
+
+export interface IComment {
+  id: string;
+  content: string;
+  dateCreated: string;
+  dateUpdated: string;
+  user: {
+    name: string;
+    image: string;
+  };
 }
