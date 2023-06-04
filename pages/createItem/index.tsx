@@ -29,7 +29,7 @@ function CreateItem() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [image]);
 
-  if (session?.user.role !== 'ADMIN') return <p>Access Denied</p>;
+  if (session?.user.role !== 'ADMIN') return <p>Ingen Tilgang</p>;
 
   // Image handling
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +38,7 @@ function CreateItem() {
 
     // Checks if is not selecter or if the file size is bigger than 10MB
     if (!file) return toast.error('No file selected');
+
     if (file.size / 1024 / 1024 > 10) return toast.error('File size too big');
 
     setImage(file);
@@ -49,7 +50,11 @@ function CreateItem() {
 
     // Sets Loading to true
     setLoading(true);
-    if (!image) return toast.error('No image selected');
+    if (!image) {
+      setImage(null);
+      setLoading(false);
+      return toast.error('No image selected');
+    }
 
     // Sending image Path, Name and ID to db and returns imageId
     const formData = new FormData();
