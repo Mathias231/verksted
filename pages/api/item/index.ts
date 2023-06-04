@@ -13,7 +13,6 @@ router.get(async (req, res) => {
   const getItem = await prisma.items.findMany({
     select: {
       id: true,
-      workshopId: true,
       category: true,
       name: true,
       itemType: true,
