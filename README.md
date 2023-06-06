@@ -38,6 +38,13 @@ GOOGLE_CLIENT_SECRET=
 
 MONGODB_URI=
 ```
+At `MONGODB_URI` you must add `verksted` after `mongodb.net/` to choose the correct collection path
+
+4. Generate prisma schema and push
+```
+prisma generate
+prisma db push
+```
 
 Once finished, run the website
 ```
