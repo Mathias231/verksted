@@ -184,7 +184,7 @@ function CreateItem() {
                         className="sr-only"
                       />
                     </label>
-                    <p className="pl-1">Eller dreg og drop</p>
+                    <p className="pl-1">Eller dra og slipp</p>
                   </div>
                   <p className="text-xs leading-5 text-gray-600">
                     PNG, JPEG opp til 10MB
