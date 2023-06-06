@@ -26,6 +26,7 @@ router.get(async (req, res) => {
       dateCreated: true,
       dateUpdated: true,
     },
+    orderBy: { dateCreated: 'desc' },
     take: parseInt(take),
     skip: parseInt(skip),
   });
