@@ -11,7 +11,7 @@ export interface IItem {
   category: string;
   name: string;
   itemType: string;
-  dateOfPurchuase: string;
+  dateOfPurchase: string;
   storageLocation: string;
   image: {
     internalName: string;
@@ -40,6 +40,7 @@ export interface IComment {
   dateCreated: string;
   dateUpdated: string;
   user: {
+    id: string;
     name: string;
     image: string;
   };
