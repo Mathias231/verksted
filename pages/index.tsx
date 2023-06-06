@@ -47,7 +47,7 @@ export default function Home() {
       )}
       <div className="border m-5 p-5 rounded-md grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
         {items.map((item) => {
-          return <Item key={item.id} {...item} />;
+          return <Item key={item.id} item={item} mutate={mutate} />;
         })}
       </div>
       <div className="flex justify-center">
