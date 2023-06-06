@@ -1,5 +1,6 @@
 import GetItems from '@/lib/hooks/getItems';
-import { IItem } from '@/types/workshop.types';
+import { ItemResponse } from '@/types/swr.types';
+import { IItem, IItemWithComments } from '@/types/workshop.types';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -7,10 +8,15 @@ import Link from 'next/link';
 import React from 'react';
 import { FaComment, FaPen, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { KeyedMutator } from 'swr';
 
-function Item(item: IItem) {
+interface ItemProps {
+  item: IItem;
+  mutate: KeyedMutator<ItemResponse>;
+}
+
+function Item({ item, mutate }: ItemProps) {
   const { data: session } = useSession();
-  const { mutate } = GetItems();
 
   const handleDelete = async (itemId: string) => {
     const deleteItem = axios.delete(`/api/item/${itemId}`).catch((err) => {
@@ -20,8 +26,6 @@ function Item(item: IItem) {
     toast.success('Gjenstand Slettet!');
     return mutate();
   };
-
-  const handleUpdate = async (itemId: string) => {};
 
   return (
     <div className="bg-lime-200 border rounded-md p-2">
@@ -33,6 +37,7 @@ function Item(item: IItem) {
         <Image
           src={`/api/image/${item.image.internalName}`}
           alt=""
+          priority
           height={256}
           width={256}
         />
@@ -52,9 +57,9 @@ function Item(item: IItem) {
           </Link>
           {session?.user.role === 'ADMIN' && (
             <>
-              <button onClick={() => handleUpdate(item.id)}>
+              {/* <button onClick={() => handleUpdate(item.id)}>
                 <FaPen className="hover:text-blue-600" />
-              </button>
+              </button> */}
               <button onClick={() => handleDelete(item.id)}>
                 <FaTrash className="hover:text-red-600" />
               </button>
