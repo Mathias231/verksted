@@ -6,6 +6,62 @@ import { NextApiRequestWithUser, getUser } from '@/middlewares/user';
 
 const router = createRouter<NextApiRequestWithUser, NextApiResponse>();
 router.use(getUser);
+
+router.get(async (req, res) => {
+  const { itemId } = req.query;
+
+  if (typeof itemId !== 'string')
+    return res.status(400).send('ItemId is not a string.');
+
+  if (!req.user?.user) return res.status(400).send('Not Authorized');
+
+  const getItemWithComments = await prisma.items
+    .findFirst({
+      where: {
+        id: itemId,
+      },
+      select: {
+        name: true,
+        category: true,
+        image: {
+          select: {
+            internalName: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            dateCreated: true,
+            dateUpdated: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: {
+            dateCreated: 'desc',
+          },
+        },
+        storageLocation: true,
+        itemType: true,
+        dateOfPurchase: true,
+        dateCreated: true,
+        dateUpdated: true,
+      },
+    })
+    .catch((err) => {
+      return null;
+    });
+
+  if (!getItemWithComments) return res.status(404).send('Item not found');
+
+  return res.status(200).send(getItemWithComments);
+});
+
 router.use(async (req, res, next) => {
   // Gets itemId and user session
   const itemId = z.string().parse(req.query.itemId);
