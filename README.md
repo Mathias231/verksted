@@ -12,7 +12,7 @@
 ### Requirements for this project
 Install [NodeJS](https://nodejs.org/en/download) and [MongoDB](https://www.mongodb.com) before you continue.
 
-If you already have `NodeJS` and `MongoDB` pre-installed, then you may contune.
+If you already have `NodeJS` and `MongoDB` installed, then you may contune.
 
 ___
 1. Open your command prompt and clone repository.
