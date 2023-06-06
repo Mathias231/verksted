@@ -1,8 +1,9 @@
 import { IComment, IItemWithComments } from '@/types/workshop.types';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React from 'react';
-import { FaTrash } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaPen, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
 
@@ -12,12 +13,14 @@ interface CommentProps {
 }
 
 function Comment({ comment, mutate }: CommentProps) {
+  const { data: session } = useSession();
+  const [showModal, setShowModal] = useState(false);
+
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
-    // Not working yet | Zod Error at /api/item/comment/[id]
     const deleteComment = axios
-      .delete(`/api/item/comment/${comment.id}`)
+      .delete(`/api/comment/${comment.id}`)
       .catch((err) => {
         toast.warn(err);
       });
@@ -40,11 +43,23 @@ function Comment({ comment, mutate }: CommentProps) {
       </div>
       <div className="p-3">{comment.content}</div>
       <span>{comment.dateCreated}</span>
-      <div className="mt-2">
-        <button onClick={handleDelete}>
-          <FaTrash />
-        </button>
-      </div>
+      {session?.user.userId === comment.user.id ||
+      session?.user.role === 'ADMIN' ? (
+        <div className="flex space-x-2">
+          <div className="mt-2">
+            <button onClick={handleDelete}>
+              <FaTrash className="hover:text-red-600" />
+            </button>
+          </div>
+          <div className="mt-2">
+            <button>
+              <FaPen className="hover:text-blue-600" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 }
