@@ -18,7 +18,7 @@ function SingleItemPage({ itemId }: PageProps) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const postComment = await axios.post('/api/item/comment/', {
+    const postComment = await axios.post('/api/comment/', {
       itemId: itemId,
       content: content,
     });
