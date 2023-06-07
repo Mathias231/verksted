@@ -2,8 +2,8 @@ import { IComment, IItemWithComments } from '@/types/workshop.types';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import React from 'react';
+import { FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { KeyedMutator } from 'swr';
 

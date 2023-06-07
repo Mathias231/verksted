@@ -57,9 +57,6 @@ function Item({ item, mutate }: ItemProps) {
           </Link>
           {session?.user.role === 'ADMIN' && (
             <>
-              {/* <button onClick={() => handleUpdate(item.id)}>
-                <FaPen className="hover:text-blue-600" />
-              </button> */}
               <button onClick={() => handleDelete(item.id)}>
                 <FaTrash className="hover:text-red-600" />
               </button>
