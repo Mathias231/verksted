@@ -14,7 +14,6 @@ interface CommentProps {
 
 function Comment({ comment, mutate }: CommentProps) {
   const { data: session } = useSession();
-  const [showModal, setShowModal] = useState(false);
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -49,11 +48,6 @@ function Comment({ comment, mutate }: CommentProps) {
           <div className="mt-2">
             <button onClick={handleDelete}>
               <FaTrash className="hover:text-red-600" />
-            </button>
-          </div>
-          <div className="mt-2">
-            <button>
-              <FaPen className="hover:text-blue-600" />
             </button>
           </div>
         </div>
